@@ -3,37 +3,47 @@ const router = express.Router();
 const adminController = require("../controllers/adminController");
 const upload = require("../middlewares/upload");
 const methodOverride = require("method-override");
+const adminAuth = require("../middlewares/adminAuth"); // ✅ Add middleware
 
-// Enable method override to support PUT & DELETE in HTML forms
+// ✅ Enable method override for PUT & DELETE in forms
 router.use(methodOverride("_method"));
 
-// 🟢 Auth
+// ✅ Login Routes
 router.get("/", adminController.renderLogin);
 router.post("/", adminController.handleLogin);
 
-// 🟢 Dashboard
-router.get("/dashboard", adminController.dashboard);
+// ✅ Logout Route
+router.get("/logout", adminController.logout);
 
-// 🟢 Pages
-router.get("/projects", adminController.projects);
-router.get("/messages", adminController.messages);
-router.get("/services", adminController.services);
+// ✅ Protected Admin Dashboard
+router.get("/dashboard", adminAuth, adminController.dashboard);
 
-// 🟢 Create Project (Form + Action)
-router.get("/projects/new", (req, res) => {
+// ✅ Pages (Protected)
+router.get("/projects", adminAuth, adminController.projects);
+router.get("/messages", adminAuth, adminController.messages);
+router.get("/services", adminAuth, adminController.services);
+
+// ✅ Create Project (Protected)
+router.get("/projects/new", adminAuth, (req, res) => {
   res.render("addProject", { layout: "layout", project: null });
 });
-router.post("/projects", upload.single("image"), adminController.addProject);
+router.post(
+  "/projects",
+  adminAuth,
+  upload.single("image"),
+  adminController.addProject
+);
 
-// 🟡 Edit Project (Form + Action)
-router.get("/projects/:id/edit", adminController.editProjectForm);
+// ✅ Edit Project (Protected)
+router.get("/projects/:id/edit", adminAuth, adminController.editProjectForm);
 router.put(
   "/projects/:id",
+  adminAuth,
   upload.single("image"),
   adminController.updateProject
 );
 
-// 🔴 Delete Project
-router.delete("/projects/:id", adminController.deleteProject);
+// ✅ Delete Project (Protected)
+router.delete("/projects/:id", adminAuth, adminController.deleteProject);
 
 module.exports = router;

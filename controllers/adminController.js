@@ -6,6 +6,9 @@ const { findUserByEmail } = require("../models/adminModel");
 
 // GET login page
 exports.renderLogin = (req, res) => {
+  if (req.session && req.session.isAdmin) {
+    return res.redirect("/admin/dashboard");
+  }
   res.render("login", { layout: false });
 };
 
@@ -20,6 +23,10 @@ exports.handleLogin = async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(401).send("Invalid email or password.");
 
+    // ✅ Set session
+    req.session.isAdmin = true;
+    req.session.adminEmail = user.email;
+
     res.redirect("/admin/dashboard");
   } catch (err) {
     console.error("Login Error:", err);
@@ -27,6 +34,7 @@ exports.handleLogin = async (req, res) => {
   }
 };
 
+// 🔒 Dashboard (protected)
 exports.dashboard = async (req, res) => {
   try {
     const projectData = await pool.query(
@@ -65,11 +73,11 @@ exports.projects = async (req, res) => {
 };
 
 exports.messages = (req, res) => {
-  res.render("messages");
+  res.render("messages", { layout: "layout" });
 };
 
 exports.services = (req, res) => {
-  res.render("services");
+  res.render("services", { layout: "layout" });
 };
 
 // ADD Project
@@ -170,4 +178,11 @@ exports.deleteProject = async (req, res) => {
     console.error("❌ Error deleting project:", err);
     res.status(500).send("Error deleting project");
   }
+};
+
+// 🚪 LOGOUT
+exports.logout = (req, res) => {
+  req.session.destroy(() => {
+    res.redirect("/admin/login");
+  });
 };
