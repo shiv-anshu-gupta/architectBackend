@@ -1,0 +1,122 @@
+<main class="messages-container">
+  <h1 class="page-title">Contact Messages</h1>
+
+  <% if (messages.length === 0) { %>
+  <p class="no-messages">No messages found.</p>
+  <% } else { %>
+  <div class="message-grid">
+    <% messages.forEach((msg) => { %>
+    <div class="message-card">
+      <div class="msg-header">
+        <div class="avatar"><%= msg.name.charAt(0).toUpperCase() %></div>
+        <div class="user-info">
+          <h3><%= msg.name %></h3>
+          <p><%= msg.email %></p>
+          <% if (msg.phone) { %>
+          <p><strong>Phone:</strong> <%= msg.phone %></p>
+          <% } %>
+        </div>
+        <div class="timestamp">
+          <%= new Date(msg.created_at).toLocaleString("en-IN", { dateStyle:
+          "medium", timeStyle: "short" }) %>
+        </div>
+      </div>
+      <div class="msg-body">
+        <% if (msg.subject) { %>
+        <h4>Subject: <%= msg.subject %></h4>
+        <% } %>
+        <p><%= msg.message %></p>
+      </div>
+    </div>
+    <% }); %>
+  </div>
+  <% } %>
+</main>
+
+<style>
+  .messages-container {
+    padding: 40px;
+  }
+
+  .page-title {
+    font-size: 28px;
+    margin-bottom: 30px;
+    color: #1d3557;
+  }
+
+  .no-messages {
+    text-align: center;
+    font-size: 18px;
+    color: #888;
+  }
+
+  .message-grid {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  }
+
+  .message-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s ease;
+  }
+
+  .message-card:hover {
+    transform: translateY(-3px);
+  }
+
+  .msg-header {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 15px;
+  }
+
+  .avatar {
+    width: 48px;
+    height: 48px;
+    background-color: #1d3557;
+    color: white;
+    border-radius: 50%;
+    font-size: 20px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+  }
+
+  .user-info h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #1d3557;
+  }
+
+  .user-info p {
+    margin: 2px 0;
+    font-size: 14px;
+    color: #444;
+  }
+
+  .timestamp {
+    margin-left: auto;
+    font-size: 13px;
+    color: #888;
+  }
+
+  .msg-body h4 {
+    margin-bottom: 8px;
+    font-size: 16px;
+    color: #333;
+  }
+
+  .msg-body p {
+    font-size: 14px;
+    color: #444;
+    line-height: 1.5;
+  }
+</style>

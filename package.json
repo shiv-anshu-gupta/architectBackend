@@ -1,0 +1,27 @@
+{
+  "name": "architectbackend",
+  "version": "1.0.0",
+  "main": "App.js",
+  "scripts": {
+    "dev": "nodemon backend/App.js",
+    "start": "node App.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "body-parser": "^2.2.0",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^17.0.1",
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "express-ejs-layouts": "^2.5.1",
+    "method-override": "^3.0.0",
+    "multer": "^2.0.1",
+    "nodemon": "^3.1.10",
+    "pg": "^8.16.3"
+  }
+}

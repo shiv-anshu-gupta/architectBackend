@@ -1,0 +1,146 @@
+<h1><%= project ? "Edit Project" : "Add New Project" %></h1>
+
+<form
+  action="<%= project ? '/admin/projects/' + project.id + '?_method=PUT' : '/admin/projects' %>"
+  method="POST"
+  enctype="multipart/form-data"
+  class="project-form"
+>
+  <div class="form-group">
+    <label for="title">Project Title</label>
+    <input
+      type="text"
+      name="title"
+      id="title"
+      required
+      value="<%= project?.title || '' %>"
+    />
+  </div>
+
+  <div class="form-group">
+    <label for="description">Description</label>
+    <textarea name="description" id="description" rows="4" required>
+<%= project?.description || '' %></textarea
+    >
+  </div>
+
+  <div class="form-group">
+    <label for="image">Project Image</label>
+    <input type="file" name="image" id="image" accept="image/*" <%= project ? ''
+    : 'required' %> /> <% if (project) { %>
+    <p style="margin-top: 5px; font-size: 13px">Current Image:</p>
+    <img
+      src="<%= project.image_url %>"
+      alt="Project Image"
+      style="max-width: 100%; border-radius: 6px; margin-top: 10px"
+    />
+    <% } %>
+
+    <img
+      id="preview"
+      src="#"
+      alt="Image Preview"
+      style="
+        display: none;
+        margin-top: 10px;
+        max-width: 100%;
+        border-radius: 6px;
+      "
+    />
+  </div>
+
+  <div class="form-group">
+    <label for="category">Category</label>
+    <input
+      type="text"
+      name="category"
+      id="category"
+      required
+      value="<%= project?.category || '' %>"
+    />
+  </div>
+
+  <button type="submit" class="submit-btn">
+    <%= project ? "Update Project" : "Create Project" %>
+  </button>
+</form>
+
+<a href="/admin/projects" class="back-link">← Back to Projects</a>
+
+<style>
+  .project-form {
+    background-color: #fff;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+    max-width: 600px;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .form-group label {
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+
+  .form-group input,
+  .form-group textarea {
+    padding: 10px;
+    font-size: 15px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+  }
+
+  .form-group input[type="file"] {
+    padding: 6px;
+    font-size: 15px;
+    border: none;
+    background-color: #f4f4f4;
+  }
+
+  .submit-btn {
+    padding: 10px 20px;
+    background-color: #1d3557;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  .submit-btn:hover {
+    background-color: #457b9d;
+  }
+
+  .back-link {
+    display: inline-block;
+    margin-top: 20px;
+    text-decoration: none;
+    color: #1d3557;
+    font-size: 14px;
+  }
+
+  .back-link:hover {
+    text-decoration: underline;
+  }
+</style>
+
+<script>
+  const imageInput = document.getElementById("image");
+  const preview = document.getElementById("preview");
+
+  imageInput?.addEventListener("change", function () {
+    const file = this.files[0];
+    if (file) {
+      preview.src = URL.createObjectURL(file);
+      preview.style.display = "block";
+    } else {
+      preview.src = "#";
+      preview.style.display = "none";
+    }
+  });
+</script>

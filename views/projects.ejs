@@ -1,0 +1,32 @@
+<h1>📁 Projects</h1>
+<a href="/admin/projects/new" class="add-btn">+ Add New Project</a>
+
+<div class="projects-grid">
+  <% if (projects && projects.length > 0) { %> <% projects.forEach(project => {
+  %>
+  <div class="card">
+    <img src="<%= project.image_url %>" alt="<%= project.title %>" />
+    <div class="card-body">
+      <h2 class="card-title"><%= project.title %></h2>
+      <p class="card-description">
+        <%= project.description.length > 100 ? project.description.substring(0,
+        100) + "..." : project.description %>
+      </p>
+      <span class="badge"><%= project.category %></span>
+    </div>
+    <div class="card-footer">
+      <a href="/admin/projects/<%= project.id %>/edit" class="btn-edit">Edit</a>
+      <form
+        action="/admin/projects/<%= project.id %>?_method=DELETE"
+        method="POST"
+      >
+        <button type="submit" class="btn-delete">Delete</button>
+      </form>
+    </div>
+  </div>
+  <% }) %> <% } else { %>
+  <div class="no-projects">
+    <p>No projects found.</p>
+  </div>
+  <% } %>
+</div>
